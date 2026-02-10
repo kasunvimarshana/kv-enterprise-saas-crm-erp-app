@@ -32,10 +32,14 @@ class TenantRepository implements TenantRepositoryInterface
     
     public function save(Tenant $tenant): void
     {
-        $model = TenantModel::findOrNew($tenant->getId());
+        $model = TenantModel::find($tenant->getId());
+        
+        if (!$model) {
+            $model = new TenantModel();
+            $model->id = $tenant->getId();
+        }
         
         $model->fill([
-            'id' => $tenant->getId(),
             'name' => $tenant->getName(),
             'domain' => $tenant->getDomain(),
             'status' => $tenant->getStatus()->value,

@@ -45,10 +45,14 @@ class OrganizationRepository implements OrganizationRepositoryInterface
     
     public function save(Organization $organization): void
     {
-        $model = OrganizationModel::findOrNew($organization->getId());
+        $model = OrganizationModel::find($organization->getId());
+        
+        if (!$model) {
+            $model = new OrganizationModel();
+            $model->id = $organization->getId();
+        }
         
         $model->fill([
-            'id' => $organization->getId(),
             'tenant_id' => $organization->getTenantId(),
             'parent_id' => $organization->getParentId(),
             'name' => $organization->getName(),
