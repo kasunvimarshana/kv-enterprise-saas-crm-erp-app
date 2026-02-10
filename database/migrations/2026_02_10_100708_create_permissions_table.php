@@ -12,8 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('permissions', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->string('module', 50)->nullable();
+            $table->string('status', 20)->default('active');
             $table->timestamps();
+            $table->softDeletes();
+            
+            $table->index('slug');
+            $table->index('module');
+            $table->index('status');
         });
     }
 
